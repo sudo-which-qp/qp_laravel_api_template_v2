@@ -70,6 +70,10 @@ class AppServiceProvider extends ServiceProvider
      */
     private function configureUrl(): void
     {
-        URL::forceScheme("https");
+        /** @var \Illuminate\Foundation\Application $app */
+        $app = $this->app;
+        if ($app->isProduction()) {
+            URL::forceScheme("https");
+        }
     }
 }
