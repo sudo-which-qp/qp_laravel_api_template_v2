@@ -6,11 +6,13 @@
 
 ## Compose Issues (Most of this issues came from windows PC)
 
-1. On windows not common on Macs, the expose server from the docker container might not load up or work. what you just have to do is run this command "docker network create application"
+1. Make sure to use "docker-compose up --build", so everything can run well, you can to enter the docker sh of the container to run the php artisan migrate and other artisan commend
 
-2. If you run the build for the first time after cloning the project and you get an error when trying to run docker-compose again, make sure that the "data/" is in the dockerignore file, if you need all the files in the data you can only ignore "data/mysql.sock".
+2. If you are getting any error about environment variables, you need to make sure you have created an environment variable with all te values, you can just copy from the .env.example file.
 
-3. Make sure to use "docker-compose up --build", so everything can run well, you can to enter the docker sh of the container to run the php artisan migrate and other artisan commend
+3. On windows not common on Macs, the expose server from the docker container might not load up or work. what you just have to do is run this command "docker network create application"
+
+4. If you run the build for the first time after cloning the project and you get an error when trying to run docker-compose again, make sure that the "data/" is in the dockerignore file, if you need all the files in the data you can only ignore "data/mysql.sock".
 
 <hr>
 
