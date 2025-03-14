@@ -17,4 +17,4 @@
 <p>But I built a CLI in Go to help me clone the project and make it for 
 any project I want. The CLI will help you get everything set, instead of cloning the project each time from GitHub.</p>
 
-<p> Here is the repo to the CLI <a href='https://github.com/sudo-which-qp/qp_laravel_cli.git'><QP></QP></a></p>
+<p> Here is the repo to the CLI <a href='https://github.com/sudo-which-qp/qp_laravel_cli.git'>QP Laravel CLI</a></p>
