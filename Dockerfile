@@ -1,7 +1,7 @@
 # Base image: PHP 8.3-alpine
 FROM php:8.3-alpine 
 
-# install system dependencies
+# Install system dependencies
 RUN apk update && apk add --no-cache \
     openssl \
     zip \
@@ -14,23 +14,20 @@ RUN apk update && apk add --no-cache \
     freetype-dev \
     libxml2-dev
 
-#install composer (PHP package manager)
+# Install composer (PHP package manager)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install PHP extensions for MySQL
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql mysqli zip
 
-# check if mbstring extension is installed (for debugging purposes)
-RUN php -m | grep mbstring
-
-# set working directory
+# Set working directory
 WORKDIR /app
 
-# copy application file into the container
-COPY . /app
+# Copy the entire application
+COPY . .
 
-# install dependencies
+# Install dependencies
 RUN composer install --optimize-autoloader --no-dev
 
 # Generate Laravel application key
