@@ -4,7 +4,7 @@
 
 <p>This is mostly focused on building API's if you make use of laravel for building livewire and adding React or Vue to your laravel project, I don't think this is for you, but you can modify the code base to suit you and what you want.</p>
 
-## Compose Issues (Most of this issues came from windows PC)
+## Common Issues (Most of this issues came from windows PC)
 
 1. Make sure to use "docker-compose up --build", so everything can run well, you can to enter the docker sh of the container to run the php artisan migrate and other artisan commend
 
