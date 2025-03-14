@@ -16,16 +16,16 @@ else
   composer install --no-interaction --no-progress
 fi
 
-# Generate application key if APP_KEY is empty or not set correctly
-if ! grep -q "APP_KEY=.*[A-Za-z0-9+/]" .env || grep -q "APP_KEY=$" .env; then
+# Generate application key if not set
+if grep -q "APP_KEY=base64:" .env && ! grep -q "APP_KEY=base64:.*[^=]" .env; then
   echo "Generating Laravel application key..."
   php artisan key:generate --no-interaction
 fi
 
 # Run migrations if needed
-if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
+if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
   echo "Running database migrations..."
-  php artisan migrate
+  php artisan migrate --force
 fi
 
 # Cache configurations for production

@@ -5,8 +5,6 @@ networks:
 
 services:
   app:
-    env_file:
-      - .env
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,18 +13,19 @@ services:
       - 8000:8000
     volumes:
       - .:/app
-      # Use a named volume for vendor directory to preserve packages
       - vendor:/app/vendor
     depends_on:
       db:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
       - DB_HOST=db
       - DB_CONNECTION=mysql
       - DB_PORT=3306
       - DB_DATABASE=test-db
-      - DB_USERNAME=${DB_USERNAME:-root}
-      - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     networks:
       - application
 
@@ -36,8 +35,10 @@ services:
       - "3307:3306"
     volumes:
       - ./data:/var/lib/mysql
+    env_file:
+      - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=test-db
     networks:
       - application
@@ -52,7 +53,7 @@ services:
           "localhost",
           "-u",
           "root",
-          "-p${DB_PASSWORD:-secret}",
+          "-p${DB_PASSWORD}",
         ]
       interval: 5s
       timeout: 5s
@@ -63,10 +64,12 @@ services:
     container_name: phpmyadmin
     ports:
       - "8080:80"
+    env_file:
+      - .env
     environment:
       - PMA_HOST=db
-      - PMA_USER=${DB_USERNAME:-root}
-      - PMA_PASSWORD=${DB_PASSWORD:-secret}
+      - PMA_USER=${DB_USERNAME}
+      - PMA_PASSWORD=${DB_PASSWORD}
     depends_on:
       - db
     networks:
