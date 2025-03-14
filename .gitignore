@@ -22,9 +22,9 @@ yarn-error.log
 /.vscode
 /.zed
 
-data/*.log
-data/temp/
-data/cache/
-data/mysql.sock
+# data/*.log
+# data/temp/
+# data/cache/
+# data/mysql.sock
 
-# data
+data/

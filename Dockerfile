@@ -12,7 +12,9 @@ RUN apk update && apk add --no-cache \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
-    libxml2-dev
+    libxml2-dev \
+    curl \
+    bash
 
 # Install composer (PHP package manager)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -24,17 +26,21 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Set working directory
 WORKDIR /app
 
-# Copy the entire application
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
+
+# Set up entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Copy the rest of the application
 COPY . .
-
-# Install dependencies
-RUN composer install --optimize-autoloader --no-dev
-
-# Generate Laravel application key
-RUN php artisan key:generate
-
-# Command to run the laravel development server
-CMD php artisan serve --host=0.0.0.0 --port=8000
 
 # Expose port 8000
 EXPOSE 8000
+
+# Use entrypoint script to handle setup tasks
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# Default command
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
