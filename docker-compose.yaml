@@ -2,8 +2,11 @@ version: "3"
 networks:
   application:
     driver: bridge
+
 services:
   app:
+    env_file:
+      - .env
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,14 +17,14 @@ services:
       - .:/app
     depends_on:
       db:
-        condition: service_healthy # Ensure MySQL is ready before Laravel starts
+        condition: service_healthy
     environment:
-      - DB_HOST=mysqldb
+      - DB_HOST=db
       - DB_CONNECTION=mysql
-      - DB_PORT=3306 # MySQL runs on 3306 inside the container
+      - DB_PORT=3306
       - DB_DATABASE=test-db
-      - DB_USERNAME=root
-      - DB_PASSWORD=root # Match MySQL container credentials
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     networks:
       - application
     command: php artisan serve --host=0.0.0.0 --port=8000
@@ -33,13 +36,36 @@ services:
     volumes:
       - ./data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=${DB_USERNAME}
       - MYSQL_DATABASE=test-db
     networks:
       - application
     container_name: mysqldb
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u${DB_USERNAME}",
+          "-p${DB_PASSWORD}",
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=${DB_USERNAME}
+      - PMA_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - application
