@@ -12,6 +12,8 @@
 
 3. Make sure to use "docker-compose up --build", so everything can run well, you can to enter the docker sh of the container to run the php artisan migrate and other artisan commend
 
+<hr>
+
 <p>But I built a CLI in Go to help me clone the project and make it for 
 any project I want. The CLI will help you get everything set, instead of cloning the project each time from GitHub.</p>
 
