@@ -1,0 +1,39 @@
+name: Publish Docker image to GHCR
+
+on:
+  push:
+    branches: [staging]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.staging
+          push: true
+          tags: |
+            ${{ secrets.REGISTRY }}/app-staging:latest
+            ${{ secrets.REGISTRY }}/app-staging:${{ github.sha }}
+
+      - name: Trigger redeploy webhook
+        if: success()
+        run: |
+          curl -X POST "${{ secrets.REDEPLOY_WEBHOOK }}"
