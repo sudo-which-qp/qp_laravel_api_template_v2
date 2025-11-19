@@ -7,7 +7,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: test_backend
     ports:
       - 8000:8000
@@ -34,7 +34,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     env_file:
       - .env
     environment:
@@ -77,3 +77,4 @@ services:
 
 volumes:
   vendor:
+  mysql_data:

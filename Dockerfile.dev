@@ -14,7 +14,8 @@ RUN apk update && apk add --no-cache \
     freetype-dev \
     libxml2-dev \
     curl \
-    bash
+    bash \
+    netcat-openbsd
 
 # Install composer (PHP package manager)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
