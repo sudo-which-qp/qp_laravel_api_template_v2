@@ -8,7 +8,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: test_backend
+    container_name: qp_template_app # always remember to change this to avoid conflicts
     ports:
       - 8000:8000
     volumes:
@@ -42,7 +42,7 @@ services:
       - MYSQL_DATABASE=test-db
     networks:
       - application
-    container_name: mysqldb
+    container_name: ${COMPOSE_PROJECT_NAME:-laravel}_db
     healthcheck:
       test:
         [
@@ -61,7 +61,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: ${COMPOSE_PROJECT_NAME:-laravel}_phpmyadmin
     ports:
       - "8080:80"
     env_file:
