@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e
 
+wait_for_db() {
+  echo "Waiting for database connection..."
+  while ! nc -z db 3306; do
+    sleep 1
+  done
+  echo "Database is ready!"
+}
+
+# Wait for database
+wait_for_db
+
 # Create .env file if it doesn't exist
 if [ ! -f .env ]; then
   echo "Creating .env file from .env.example..."
